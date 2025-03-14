@@ -37,7 +37,7 @@ const setCssLoaders = (extra) => {
   return loaders;
 };
 
-const setPlagins = () => {
+const setPlugins = () => {
   const plugins = [
     new HtmlWebpackPlugin({
       template: './index.html',
@@ -54,27 +54,30 @@ const setPlagins = () => {
     new MiniCssExtractPlugin({
       filename: getFileName('css'),
     }),
+    new EslintWebpackPlugin({  
+      extensions: ['js', 'jsx', 'ts', 'tsx'],
+      fix: true, // Автоматично виправляти помилки
+    }),
   ];
-  new EslintWebpackPlugin({
-    extensions: ['js', 'jsx', 'ts', 'tsx'],
-    fix: true,  // Автоматично виправляти помилки
-  });
-  
+
   return plugins;
 };
-
+  
 const setJsLoaders = (extra) => {
-  const loaders = {
-    loader: 'babel-loader',
-    options: {
-      presets: ['@babel/preset-env'],
+  const loaders = [
+    {
+      loader: 'babel-loader',
+      options: {
+        presets: ['@babel/preset-env'],
+      },
     },
-  };
+  ];
 
   if (extra) {
-    loaders.options.presets.push(extra);
+    loaders[0].options.presets.push(extra);
   }
-  return [loaders]; // Повертаємо у вигляді масиву
+
+  return loaders; // Повертаємо масив
 };
 
 
@@ -134,19 +137,14 @@ export default {
         test: /\.(ttf|woff|woff2|eot)$/,
         type: 'asset/resource',
         generator: {
-          filename: 'assets/fonts/getFileName([ext])',
+          filename: 'assets/fonts/[name][ext]',
         },
       },
       {
         test: /\.m?js$/,
         exclude: /node_modules/,
         use: setJsLoaders(), 
-      },
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: setJsLoaders(),
-      },
+      },      
       {
         test: /\.jsx$/,
         exclude: /node_modules/,
@@ -159,5 +157,5 @@ export default {
       },
     ],
   },
-  plugins: setPlagins(),
+  plugins: setPlugins(),
 };

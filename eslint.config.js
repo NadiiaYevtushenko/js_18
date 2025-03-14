@@ -8,7 +8,8 @@ export default [
       "no-unused-vars": "warn",
       "no-undef": "warn",
       "sort-keys": "warn",
-      "valid-jsdoc": "off"
+      "valid-jsdoc": "off",
+      "no-console": "off"
     }
   }
 ];
